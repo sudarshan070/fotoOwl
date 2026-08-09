@@ -1,5 +1,4 @@
 import { useCallback, useRef, useState } from 'react';
-import { flushSync } from 'react-dom';
 import type { CSSProperties, Key } from 'react';
 
 export interface UseReelSwiperOptions<T> {
@@ -22,10 +21,7 @@ export function useReelSwiper<T>({ onActiveChange }: UseReelSwiperOptions<T>) {
       if (node === visible.target) index = key;
     });
     if (index === -1) return;
-    // IntersectionObserver callbacks fire outside React's event system, so a plain
-    // setState here would be scheduled but not flushed before the caller (and any
-    // synchronous test assertion) continues. flushSync forces the commit immediately.
-    flushSync(() => setActiveIndex(index));
+    setActiveIndex(index);
     onActiveChangeRef.current?.(index);
   }, []);
 

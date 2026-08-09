@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { useReelSwiper } from './use-reel-swiper';
 
 class MockIntersectionObserver {
@@ -33,7 +33,9 @@ describe('useReelSwiper', () => {
     const item1 = document.createElement('div');
     result.current.getItemProps('b', 1).ref(item1);
 
-    MockIntersectionObserver.instances[0].trigger(item1, true);
+    act(() => {
+      MockIntersectionObserver.instances[0].trigger(item1, true);
+    });
 
     expect(result.current.activeIndex).toBe(1);
     expect(onActiveChange).toHaveBeenCalledWith(1);
