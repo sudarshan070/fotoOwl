@@ -52,5 +52,5 @@ export function useMediaSearch(params: SearchParams): UseMediaSearchResult {
     if (nextPage !== null) setPage(nextPage);
   }, [nextPage]);
 
-  return { items, loading, error, hasMore: nextPage !== null, loadMore };
+  return { items, loading, error, hasMore: nextPage !== null && error === null, loadMore };
 }

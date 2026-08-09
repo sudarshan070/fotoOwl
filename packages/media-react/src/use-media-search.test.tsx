@@ -53,5 +53,6 @@ describe('useMediaSearch', () => {
 
     expect(result.current.error).toBeInstanceOf(MediaApiError);
     expect(result.current.items).toHaveLength(0);
+    expect(result.current.hasMore).toBe(false);
   });
 });
