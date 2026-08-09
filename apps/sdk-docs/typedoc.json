@@ -1,0 +1,8 @@
+{
+  "entryPoints": ["../../packages/media-core/src/index.ts", "../../packages/media-react/src/index.ts"],
+  "out": "dist",
+  "name": "FotoOwl Media SDK",
+  "tsconfig": "./tsconfig.json",
+  "excludePrivate": true,
+  "readme": "none"
+}

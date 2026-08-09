@@ -1,0 +1,11 @@
+{
+  "name": "sdk-docs",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "typedoc"
+  },
+  "devDependencies": {
+    "typedoc": "^0.26.0"
+  }
+}

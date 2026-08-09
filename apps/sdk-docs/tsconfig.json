@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "media-core": ["../../packages/media-core/src/index.ts"],
+      "media-react": ["../../packages/media-react/src/index.ts"]
+    },
+    "jsx": "react-jsx",
+    "noEmit": true
+  },
+  "include": [
+    "../../packages/media-core/src/index.ts",
+    "../../packages/media-react/src/index.ts"
+  ]
+}
