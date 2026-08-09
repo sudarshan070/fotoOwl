@@ -47,8 +47,9 @@ export class MediaClient {
       per_page: String(params.perPage ?? 20)
     });
     const key = `search:${mediaType}:${query.toString()}`;
+    const path = mediaType === 'videos' ? '/videos/search' : '/v1/search';
     return this.cache.getOrFetch(key, () =>
-      this.fetchJson(`/v1/${mediaType}/search?${query.toString()}`, mediaType)
+      this.fetchJson(`${path}?${query.toString()}`, mediaType)
     );
   }
 
