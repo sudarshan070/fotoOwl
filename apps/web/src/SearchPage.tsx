@@ -22,6 +22,7 @@ export function SearchPage() {
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     setQuery(pendingQuery.trim());
+    setOpenIndex(null);
   }
 
   function openItem(item: MediaItem, index: number) {
