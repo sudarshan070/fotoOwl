@@ -29,10 +29,16 @@ describe('useMediaEvents + useTrackMediaEvent', () => {
 
     // Capture `track` before unmount: useImperativeHandle nulls out `ref.current`
     // on unmount, so `ref.current.track` would throw for reasons unrelated to
-    // the hook under test. Capturing the function itself lets us verify emitting
-    // after teardown doesn't throw, which is the behavior this assertion targets.
+    // the hook under test.
     const track = ref.current.track;
     unmount();
-    expect(() => track('view', { item: { id: 1 } as any, source: 'grid' as any })).not.toThrow();
+
+    // `track` just calls `client.events.emit(...)`, a plain method call that never
+    // throws regardless of subscription state — so `not.toThrow()` alone doesn't
+    // prove unsubscribe happened. The assertion that actually exercises
+    // useMediaEvents' cleanup is that `handler`'s call count stays at 1 (its
+    // pre-unmount count) after emitting again post-unmount.
+    track('view', { item: { id: 1 } as any, source: 'grid' as any });
+    expect(handler).toHaveBeenCalledTimes(1);
   });
 });
