@@ -5,7 +5,10 @@ import type { MediaItem } from 'media-core';
 import { LightboxOverlay } from './LightboxOverlay';
 import { ReelsView } from './ReelsView';
 
+type MediaTab = 'photos' | 'videos';
+
 export function SearchPage() {
+  const [activeTab, setActiveTab] = useState<MediaTab>('photos');
   const [query, setQuery] = useState('');
   const [pendingQuery, setPendingQuery] = useState('');
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -30,8 +33,34 @@ export function SearchPage() {
     setOpenIndex(index);
   }
 
+  function selectTab(tab: MediaTab) {
+    setActiveTab(tab);
+    setOpenIndex(null);
+  }
+
   return (
     <div className="page-content">
+      <div className="media-tabs" role="tablist" aria-label="Media type">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeTab === 'photos'}
+          className={`media-tab${activeTab === 'photos' ? ' media-tab-active' : ''}`}
+          onClick={() => selectTab('photos')}
+        >
+          📷 Photos
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeTab === 'videos'}
+          className={`media-tab${activeTab === 'videos' ? ' media-tab-active' : ''}`}
+          onClick={() => selectTab('videos')}
+        >
+          🎬 Videos
+        </button>
+      </div>
+
       <form className="search-form" onSubmit={handleSubmit}>
         <input
           className="search-input"
@@ -44,32 +73,45 @@ export function SearchPage() {
         </button>
       </form>
 
-      {error && (
-        <p className="error-banner" role="alert">
-          Failed to load: {error.message}
-        </p>
+      {activeTab === 'photos' ? (
+        <>
+          {error && (
+            <p className="error-banner" role="alert">
+              Failed to load: {error.message}
+            </p>
+          )}
+
+          <div {...getGridProps()} className="media-grid">
+            {items.map((item, index) => (
+              <button {...getItemProps(item, index)} className="media-tile" onClick={() => openItem(item, index)}>
+                {item.type === 'photo' ? (
+                  <img src={item.src.medium} alt={item.alt ?? ''} />
+                ) : (
+                  <img src={item.image} alt="" />
+                )}
+              </button>
+            ))}
+          </div>
+          <div {...getSentinelProps()} />
+          {loading && <p className="loading-text">Loading...</p>}
+
+          {openIndex !== null && (
+            <LightboxOverlay items={items} initialIndex={openIndex} onClose={() => setOpenIndex(null)} onDownload={(item) => track('download', { item, variant: 'original' })} />
+          )}
+        </>
+      ) : (
+        <>
+          {videoResult.error && (
+            <p className="error-banner" role="alert">
+              Failed to load: {videoResult.error.message}
+            </p>
+          )}
+          {videoResult.loading && <p className="loading-text">Loading...</p>}
+          <div className="reels-section">
+            <ReelsView items={videoResult.items} onView={(item) => track('view', { item, source: 'reel' })} />
+          </div>
+        </>
       )}
-
-      <div {...getGridProps()} className="media-grid">
-        {items.map((item, index) => (
-          <button {...getItemProps(item, index)} className="media-tile" onClick={() => openItem(item, index)}>
-            {item.type === 'photo' ? (
-              <img src={item.src.medium} alt={item.alt ?? ''} />
-            ) : (
-              <img src={item.image} alt="" />
-            )}
-          </button>
-        ))}
-      </div>
-      <div {...getSentinelProps()} />
-      {loading && <p className="loading-text">Loading...</p>}
-
-      {openIndex !== null && (
-        <LightboxOverlay items={items} initialIndex={openIndex} onClose={() => setOpenIndex(null)} onDownload={(item) => track('download', { item, variant: 'original' })} />
-      )}
-
-      <h2 className="section-heading">Video reels</h2>
-      <ReelsView items={videoResult.items} onView={(item) => track('view', { item, source: 'reel' })} />
     </div>
   );
 }
