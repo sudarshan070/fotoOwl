@@ -17,16 +17,18 @@ export function ReelsView({ items, onView }: { items: MediaItem[]; onView: (item
   const containerProps = getContainerProps();
 
   return (
-    <div {...containerProps} style={{ ...containerProps.style, height: 500, width: 280 }}>
+    <div {...containerProps} className="reels-container" style={{ ...containerProps.style, height: 500, width: 280 }}>
       {items.map((item, index) => {
         const itemProps = getItemProps(item, index);
         return item.type === 'video' ? (
           <video
             {...itemProps}
+            className="reels-item"
             style={{ ...itemProps.style, height: 500, width: 280, objectFit: 'cover' }}
             src={item.videoFiles[0]?.link}
             muted
             loop
+            playsInline
             autoPlay={index === activeIndex}
           />
         ) : null;

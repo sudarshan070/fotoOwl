@@ -31,41 +31,44 @@ export function SearchPage() {
   }
 
   return (
-    <div style={{ padding: 24 }}>
-      <form onSubmit={handleSubmit}>
+    <div className="page-content">
+      <form className="search-form" onSubmit={handleSubmit}>
         <input
+          className="search-input"
           value={pendingQuery}
           onChange={(event) => setPendingQuery(event.target.value)}
           placeholder="Search Pexels..."
         />
-        <button type="submit">Search</button>
+        <button className="search-button" type="submit">
+          Search
+        </button>
       </form>
 
-      {error && <p role="alert">Failed to load: {error.message}</p>}
+      {error && (
+        <p className="error-banner" role="alert">
+          Failed to load: {error.message}
+        </p>
+      )}
 
-      <div {...getGridProps()} style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginTop: 16 }}>
+      <div {...getGridProps()} className="media-grid">
         {items.map((item, index) => (
-          <button
-            {...getItemProps(item, index)}
-            onClick={() => openItem(item, index)}
-            style={{ padding: 0, border: 'none', cursor: 'pointer' }}
-          >
+          <button {...getItemProps(item, index)} className="media-tile" onClick={() => openItem(item, index)}>
             {item.type === 'photo' ? (
-              <img src={item.src.medium} alt={item.alt ?? ''} style={{ width: '100%', display: 'block' }} />
+              <img src={item.src.medium} alt={item.alt ?? ''} />
             ) : (
-              <img src={item.image} alt="" style={{ width: '100%', display: 'block' }} />
+              <img src={item.image} alt="" />
             )}
           </button>
         ))}
       </div>
       <div {...getSentinelProps()} />
-      {loading && <p>Loading...</p>}
+      {loading && <p className="loading-text">Loading...</p>}
 
       {openIndex !== null && (
         <LightboxOverlay items={items} initialIndex={openIndex} onClose={() => setOpenIndex(null)} onDownload={(item) => track('download', { item, variant: 'original' })} />
       )}
 
-      <h2>Video reels</h2>
+      <h2 className="section-heading">Video reels</h2>
       <ReelsView items={videoResult.items} onView={(item) => track('view', { item, source: 'reel' })} />
     </div>
   );

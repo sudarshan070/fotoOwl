@@ -19,23 +19,25 @@ export function LightboxOverlay({
   });
 
   return (
-    <div
-      {...getOverlayProps()}
-      style={{
-        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16
-      }}
-    >
+    <div {...getOverlayProps()} className="lightbox-overlay">
       {currentItem.type === 'photo' ? (
-        <img src={currentItem.src.large} alt={currentItem.alt ?? ''} style={{ maxHeight: '80vh', maxWidth: '90vw' }} />
+        <img className="lightbox-media" src={currentItem.src.large} alt={currentItem.alt ?? ''} />
       ) : (
-        <video src={currentItem.videoFiles[0]?.link} controls style={{ maxHeight: '80vh', maxWidth: '90vw' }} />
+        <video className="lightbox-media" src={currentItem.videoFiles[0]?.link} controls />
       )}
-      <div style={{ display: 'flex', gap: 12 }}>
-        <button {...getPrevProps()}>◀ Prev</button>
-        <button onClick={() => onDownload(currentItem)}>Download</button>
-        <button {...getNextProps()}>Next ▶</button>
-        <button {...getCloseProps()}>Close</button>
+      <div className="lightbox-controls">
+        <button {...getPrevProps()} className="lightbox-button">
+          ◀ Prev
+        </button>
+        <button className="lightbox-button lightbox-button-primary" onClick={() => onDownload(currentItem)}>
+          Download
+        </button>
+        <button {...getNextProps()} className="lightbox-button">
+          Next ▶
+        </button>
+        <button {...getCloseProps()} className="lightbox-button lightbox-button-close">
+          Close
+        </button>
       </div>
     </div>
   );
