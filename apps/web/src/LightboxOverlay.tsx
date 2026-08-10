@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { useLightbox } from 'media-ui-react';
 import type { MediaItem } from 'media-core';
+import { downloadMedia } from './download-media';
 
 export function LightboxOverlay({
   items,
@@ -17,6 +19,21 @@ export function LightboxOverlay({
     initialIndex,
     onClose
   });
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
+
+  async function handleDownload() {
+    setIsDownloading(true);
+    setDownloadError(null);
+    try {
+      await downloadMedia(currentItem);
+      onDownload(currentItem);
+    } catch (error) {
+      setDownloadError(error instanceof Error ? error.message : 'Download failed');
+    } finally {
+      setIsDownloading(false);
+    }
+  }
 
   return (
     <div {...getOverlayProps()} className="lightbox-overlay">
@@ -25,12 +42,17 @@ export function LightboxOverlay({
       ) : (
         <video className="lightbox-media" src={currentItem.videoFiles[0]?.link} controls />
       )}
+      {downloadError && (
+        <p className="error-banner" role="alert">
+          {downloadError}
+        </p>
+      )}
       <div className="lightbox-controls">
         <button {...getPrevProps()} className="lightbox-button">
           ◀ Prev
         </button>
-        <button className="lightbox-button lightbox-button-primary" onClick={() => onDownload(currentItem)}>
-          Download
+        <button className="lightbox-button lightbox-button-primary" onClick={handleDownload} disabled={isDownloading}>
+          {isDownloading ? 'Downloading…' : 'Download'}
         </button>
         <button {...getNextProps()} className="lightbox-button">
           Next ▶
