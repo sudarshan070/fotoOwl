@@ -51,6 +51,19 @@ input {
   font-family: inherit;
 }
 
+/*
+  media-ui-react's own a11y notes call this out explicitly: "None of these
+  hooks ships visible focus styles... add your own :focus-visible CSS on
+  interactive elements." Every clickable element in this app is a <button>
+  or <input>, so one rule covers the grid tiles, tabs, search button, and
+  lightbox controls without needing a style per component.
+*/
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--color-primary-600);
+  outline-offset: 2px;
+}
+
 .app-shell {
   min-height: 100vh;
 }
@@ -157,11 +170,10 @@ input {
   background: var(--color-white);
   font-size: 15px;
   color: var(--color-secondary-900);
-  outline: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.search-input:focus {
+.search-input:focus-visible {
   border-color: var(--color-primary-500);
   box-shadow: 0 0 0 3px var(--color-primary-100);
 }
