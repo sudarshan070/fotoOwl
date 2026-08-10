@@ -31,29 +31,36 @@ export function ReelsView({ items, onView }: { items: MediaItem[]; onView: (item
   const containerProps = getContainerProps();
 
   return (
-    <div {...containerProps} className="reels-container" style={{ ...containerProps.style, height: 500, width: 280 }}>
-      {items.map((item, index) => {
-        const itemProps = getItemProps(item, index);
-        return item.type === 'video' ? (
-          <video
-            {...itemProps}
-            ref={(node) => {
-              itemProps.ref(node);
-              if (node) {
-                videoElementsRef.current.set(index, node);
-              } else {
-                videoElementsRef.current.delete(index);
-              }
-            }}
-            className="reels-item"
-            style={{ ...itemProps.style, height: 500, width: 280, objectFit: 'cover' }}
-            src={item.videoFiles[0]?.link}
-            muted
-            loop
-            playsInline
-          />
-        ) : null;
-      })}
+    <div className="reels-frame">
+      {items.length > 0 && (
+        <span className="reels-counter">
+          {activeIndex + 1} / {items.length}
+        </span>
+      )}
+      <div {...containerProps} className="reels-container" style={{ ...containerProps.style, height: '100%', width: '100%' }}>
+        {items.map((item, index) => {
+          const itemProps = getItemProps(item, index);
+          return item.type === 'video' ? (
+            <video
+              {...itemProps}
+              ref={(node) => {
+                itemProps.ref(node);
+                if (node) {
+                  videoElementsRef.current.set(index, node);
+                } else {
+                  videoElementsRef.current.delete(index);
+                }
+              }}
+              className="reels-item"
+              style={{ ...itemProps.style, height: '100%', width: '100%', objectFit: 'cover' }}
+              src={item.videoFiles[0]?.link}
+              muted
+              loop
+              playsInline
+            />
+          ) : null;
+        })}
+      </div>
     </div>
   );
 }

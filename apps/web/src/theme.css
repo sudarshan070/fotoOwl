@@ -318,13 +318,44 @@ input:focus-visible {
   color: var(--color-secondary-600);
 }
 
-.reels-container {
+.reels-frame {
+  position: relative;
+  height: min(78vh, 780px);
+  aspect-ratio: 9 / 16;
   border-radius: var(--radius-2xl);
   border: 1px solid var(--color-secondary-800);
   background: var(--color-secondary-950);
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-lifted);
+  overflow: hidden;
+}
+
+.reels-container {
+  height: 100%;
+  width: 100%;
+  /* Hide the native scrollbar — Instagram/TikTok-style reels scroll via swipe/wheel,
+     not a visible track. Scroll-snap behavior (from useReelSwiper) is unaffected. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.reels-container::-webkit-scrollbar {
+  display: none;
 }
 
 .reels-item {
   background: var(--color-secondary-900);
+}
+
+.reels-counter {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 1;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(11, 14, 20, 0.55);
+  color: var(--color-white);
+  font-size: 12px;
+  font-weight: 600;
+  backdrop-filter: blur(4px);
 }
