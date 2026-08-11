@@ -60,7 +60,7 @@ Full running log in `DECISIONS.md`. Headline items:
 
 ## AI chat transcript(s)
 
-- `<TODO: link to the Claude Code conversation(s) used while building this>`
+- https://gist.github.com/sudarshan070/98f09c61c7369f22621a3d4c887e64c7 — condensed transcript of the Claude Code (terminal) session used to plan, implement, review, debug, and deploy this project.
 
 ## Building and deploying
 
