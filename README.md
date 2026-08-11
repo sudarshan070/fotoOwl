@@ -56,7 +56,7 @@ Full running log in `DECISIONS.md`. Headline items:
 - **React Native support** (`media-native` / `media-ui-native`) was cut entirely for this pass — the spec's app deliverable is React web, and building both platforms in the same ~9hr budget would have thinned every layer rather than delivering two solid ones. `media-core`'s API and `media-ui-react`'s prop-getter shapes were designed so a native wrapper/component pair could be added later without changing either. Confirmed with the requester before starting.
 - **`useLightbox` ships a simplified focus model, not a full cyclic focus trap.** Focus moves into the dialog on open and Escape/Arrow keys work via a document-level listener, but Tab does not wrap from the last focusable element back to the first. Cut for time; the prop-getter shape (`getOverlayProps` returning `ref`/`role`/`aria-modal`/`tabIndex`) doesn't need to change to add full trap cycling later.
 - **Dogfooding the two skill docs against the finished code** (rather than writing them from memory) turned up one real documentation mismatch and one real runtime gotcha, both corrected — see the "AI-assisted vs hand-written" section above and `DECISIONS.md` for the full write-up.
-- **Nothing has been deployed yet.** The three `vercel.json` configs exist and build cleanly, but no `vercel --prod` command has actually been run — see "Building and deploying" below for why, and the Deployed URLs section above for the outstanding TODOs.
+- **The first real Vercel deploy of `apps/web` failed**: its `vercel.json` built only `apps/web` itself, not the workspace packages it depends on, so a fresh checkout (with no pre-built `dist/` folders) couldn't resolve `media-react`. Fixed by switching to `turbo run build --filter=web`, which builds dependencies first — see `DECISIONS.md` for the full write-up. All three projects are now deployed; see Deployed URLs above.
 
 ## AI chat transcript(s)
 
@@ -70,18 +70,12 @@ Build everything in dependency order:
 pnpm install && pnpm turbo run build
 ```
 
-Each of `apps/web`, `packages/media-ui-react` (Storybook), and `apps/sdk-docs` (TypeDoc) has its own `vercel.json` and is deployed as an independent Vercel project. Create each project once (via the dashboard or `vercel link`) with its **Root Directory** set per the table below, so Vercel finds the matching `vercel.json`:
+Each of `apps/web`, `packages/media-ui-react` (Storybook), and `apps/sdk-docs` (TypeDoc) has its own `vercel.json` and is deployed as an independent Vercel project, each with its **Root Directory** set per the table below so Vercel finds the matching `vercel.json`:
 
-| Project | Root Directory | Deployable content |
+| Root Directory | Deployable content | Live URL |
 |---|---|---|
-| `fotoowl-web` | `apps/web` | The app |
-| `fotoowl-component-docs` | `packages/media-ui-react` | Storybook |
-| `fotoowl-sdk-docs` | `apps/sdk-docs` | TypeDoc site |
+| `apps/web` | The app | https://foto-owl-web-ecru.vercel.app/ |
+| `packages/media-ui-react` | Storybook (component docs) | https://foto-owl-media-ui-react.vercel.app/ |
+| `apps/sdk-docs` | TypeDoc site (SDK docs) | https://fotoowl-sdk-docs.vercel.app |
 
-Once linked, each deploys with:
-
-```bash
-vercel --prod --cwd <root directory>
-```
-
-These commands are documented here but have **not** been run as part of this task — deploying pushes to a shared, externally-visible system and requires the account owner's own Vercel login and explicit go-ahead.
+All three are deployed via the Vercel dashboard (import the repo once per project, set its Root Directory, deploy). The equivalent CLI command for redeploying any of them is `vercel --prod --cwd <root directory>` from a linked project.
