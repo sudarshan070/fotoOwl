@@ -2,6 +2,8 @@
 
 A headless media SDK ecosystem over the Pexels API: a framework-agnostic core, a React wrapper, a headless React component library, and one app wiring them together.
 
+**Repo:** https://github.com/sudarshan070/fotoOwl
+
 ## Packages
 
 - `packages/media-core` — Pexels client, auth, event emitter, caching. Pure TypeScript.
