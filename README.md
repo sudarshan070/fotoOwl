@@ -19,9 +19,9 @@ React Native (`media-native` / `media-ui-native`) was cut from this pass — see
 
 ## Deployed URLs
 
-- App: `<TODO: fill in after running `vercel --prod --cwd apps/web``>`
-- SDK docs: `<TODO: fill in after running `vercel --prod --cwd apps/sdk-docs``>`
-- Component docs: `<TODO: fill in after running `vercel --prod --cwd packages/media-ui-react``>`
+- App: https://foto-owl-web-ecru.vercel.app/
+- SDK docs: https://fotoowl-sdk-docs.vercel.app
+- Component docs: https://foto-owl-media-ui-react.vercel.app/
 
 ## AI-assisted vs hand-written
 
